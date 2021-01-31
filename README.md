@@ -8,7 +8,8 @@ The table below shows the current status of the features:
 | :-----: | :---: | :---: | :---: | :---: |
 | Forward | ✔ | ❌ | ❌ | ❌ |
 | Reply   | ❌ | ❌ | ❌ | ❌ |
-| Edit    | ❌ | ❌ | - | - |
+| Edit    | ❌ | ❌ | - | - |  
+
 All of these features will be implemented.  
 
 # Overview  
