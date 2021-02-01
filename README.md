@@ -46,7 +46,7 @@ forward:                      # the ID and channel-username you want to forward 
 In this project, the sender must be channels. 
 If you put the `ID` of a user or a group into the `src` field, the program will ignore it.    
 You can declare the sender or receiver in two ways. 
-The first way is to declare its `ID`. The second way is to declare its `channel username` (**Neither the username of a group, nor the username a user !!!**). 
+The first way is to declare its `ID`. The second way is to declare its `channel username` (**Neither the username of a group, nor the username of a user !!!**). 
 
 As you may find out, you can put `channel username` and `ID` in the same YAML array. 
 Yes! This is okay, and the behaviour of this will be within your expectation.  
