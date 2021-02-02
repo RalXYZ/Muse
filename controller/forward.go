@@ -6,17 +6,22 @@ import (
 	"github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func NeedsForward(message *tgbotapi.Message) bool {
+type Forward struct {
+	Post *tgbotapi.Message
+	Bot  *tgbotapi.BotAPI
+}
+
+func (f *Forward) NeedsForward() bool {
 	for _, v := range conf.ForwardSrc.IdArray {
 		v := v
-		fmt.Println(message)
-		if v == message.Chat.ID {
+		fmt.Println(f.Post)
+		if v == f.Post.Chat.ID {
 			return true
 		}
 	}
 	for _, v := range conf.ForwardSrc.UserNameArray {
 		v := v
-		if v == message.Chat.UserName {
+		if v == f.Post.Chat.UserName {
 			return true
 		}
 	}
@@ -24,20 +29,20 @@ func NeedsForward(message *tgbotapi.Message) bool {
 	return false
 }
 
-func DoForward(bot *tgbotapi.BotAPI, message *tgbotapi.Message) bool {
+func (f *Forward) DoForward() bool {
 	for _, v := range conf.ForwardDest.IdArray {
 		v := v
-		msg := tgbotapi.NewMessage(v, message.Text)
-		_, err := bot.Send(msg)
+		msg := tgbotapi.NewMessage(v, f.Post.Text)
+		_, err := f.Bot.Send(msg)
 		if err != nil {
 			panic(err)
 		}
 	}
 	for _, v := range conf.ForwardDest.UserNameArray {
 		v := v
-		msg := tgbotapi.NewMessage(0, message.Text)
+		msg := tgbotapi.NewMessage(0, f.Post.Text)
 		msg.ChannelUsername = v
-		_, err := bot.Send(msg)
+		_, err := f.Bot.Send(msg)
 		if err != nil {
 			panic(err)
 		}

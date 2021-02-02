@@ -7,8 +7,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+func init() {
+	conf.Init()
+}
+
 func main() {
-	conf.InitConf()
 	bot, err := tgbotapi.NewBotAPI(viper.GetString("bot.token"))
 	if err != nil {
 		panic(err)
@@ -25,8 +28,9 @@ func main() {
 		if update.ChannelPost == nil {
 			continue
 		}
-		if controller.NeedsForward(update.ChannelPost) {
-			controller.DoForward(bot, update.ChannelPost)
+		f := controller.Forward{Post: update.ChannelPost, Bot: bot}
+		if f.NeedsForward() {
+			f.DoForward()
 		}
 	}
 }

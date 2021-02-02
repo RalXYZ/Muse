@@ -18,7 +18,7 @@ type forwardEnd struct {
 var ForwardSrc forwardEnd
 var ForwardDest forwardEnd
 
-func InitConf() {
+func Init() {
 	viper.SetConfigName("conf")  // set the config file name. Viper will automatically detect the file extension name
 	viper.AddConfigPath("./")     // search the config file under the current directory
 
