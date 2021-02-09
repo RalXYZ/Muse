@@ -4,17 +4,16 @@ import (
 	"Muse/conf"
 	"Muse/controller"
 	"github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
-func init() {
-	conf.Init()
-}
-
 func main() {
+	conf.Init()
+
 	bot, err := tgbotapi.NewBotAPI(viper.GetString("bot.token"))
 	if err != nil {
-		panic(err)
+		logrus.Fatal(err)
 	}
 
 	bot.Debug = viper.GetBool("bot.debug")
@@ -28,9 +27,15 @@ func main() {
 		if update.ChannelPost == nil {
 			continue
 		}
-		f := controller.Forward{Post: update.ChannelPost, Bot: bot}
+		f := controller.Forward {
+			Post: update.ChannelPost,
+			Bot: bot,
+		}
 		if f.NeedsForward() {
-			f.DoForward()
+			for _, v := range conf.ForwardDest.IdArray {
+				v := v
+				go f.DoForward(v)
+			}
 		}
 	}
 }

@@ -2,7 +2,9 @@ package conf
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"reflect"
 )
 
 var confItems = map[string][]string {
@@ -11,7 +13,6 @@ var confItems = map[string][]string {
 }
 
 type forwardEnd struct {
-	UserNameArray []string
 	IdArray       []int64
 }
 
@@ -23,16 +24,13 @@ func Init() {
 	viper.AddConfigPath("./")     // search the config file under the current directory
 
 	if err := viper.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("Fatal error while reading config file: %s \n", err))
+		logrus.Fatal(err)
 	}
 
-	fmt.Println("Configuration file loaded.")
+	logrus.Info("Configuration file loaded")
 
 	for k, v := range confItems {
-		err := checkConfIsSet(k, v)
-		if err {
-			panic(fmt.Sprintf("\"%s\" item of your config file hasn't been set properly. \nPlease check your config file.", k))
-		}
+		checkConfIsSet(k, v)
 	}
 
 	ForwardSrc.classifyForwardConfig(viper.Get("forward.src"))
@@ -41,13 +39,12 @@ func Init() {
 	fmt.Println("Configuration file checking succeeded. All required values are set.")
 }
 
-func checkConfIsSet(name string, keys []string) (getKeyErrExists bool) {
-	getKeyErrExists = false
+func checkConfIsSet(name string, keys []string) {
 	for i := range keys {
-		if !viper.IsSet(name + "." + keys[i]) {
-			fmt.Printf("\"%s\" not set", keys[i])
-			fmt.Printf("in\"" + name + "\"\n")
-			getKeyErrExists = true
+		wholeKey := name + "." + keys[i]
+		if !viper.IsSet(wholeKey) {
+			logrus.WithField(wholeKey, nil).
+				Fatal("The following item of your configuration file hasn't been set properly: ")
 		}
 	}
 	return
@@ -67,9 +64,8 @@ func (f *forwardEnd) setForwardValue(conf interface{}) {
 	switch t := conf.(type) {
 	case int:
 		f.IdArray = append(f.IdArray, int64(t))
-	case string:
-		f.UserNameArray = append(f.UserNameArray, t)
 	default:
-		panic(`"forward" field of the config file hasn't been set correctly`)
+		logrus.WithField(fmt.Sprintf(`TypeOf(%v)`, t), reflect.TypeOf(t)).
+			Fatal(`Configuration file hasn't been set correctly, type error:`)
 	}
 }
