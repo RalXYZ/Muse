@@ -36,7 +36,7 @@ func Init() {
 	ForwardSrc.classifyForwardConfig(viper.Get("forward.src"))
 	ForwardDest.classifyForwardConfig(viper.Get("forward.dest"))
 
-	fmt.Println("Configuration file checking succeeded. All required values are set.")
+	logrus.Info("Configuration file checking succeeded")
 }
 
 func checkConfIsSet(name string, keys []string) {
