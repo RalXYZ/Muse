@@ -11,7 +11,7 @@ type message struct {
 }
 
 func (m *message) syncFwd() {
-	for _, v := range conf.ForwardDest.IdArray {
+	for _, v := range conf.FwdRuleMap[m.Chat.ID] {
 		go func(chatID int64) {
 			msg := m.createSyncMsg(chatID)
 			_, err := bot.Send(msg)

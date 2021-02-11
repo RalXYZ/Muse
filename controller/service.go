@@ -25,11 +25,6 @@ func StartService(config tgbotapi.UpdateConfig) {
 }
 
 func needFwd(chatID int64) bool {
-	for _, v := range conf.ForwardSrc.IdArray {
-		v := v
-		if v == chatID {
-			return true
-		}
-	}
-	return false
+	_, ok := conf.FwdRuleMap[chatID]
+	return ok
 }

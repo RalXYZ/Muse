@@ -20,7 +20,7 @@ func (m *message) asyncFwd() {
 	if media == nil {
 		return
 	}
-	for _, v := range conf.ForwardDest.IdArray {
+	for _, v := range conf.FwdRuleMap[m.Chat.ID] {
 		go func(chatID int64) {
 			msg := tgbotapi.NewMediaGroup(chatID, media)
 			_, err := bot.Send(msg)

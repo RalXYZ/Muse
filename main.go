@@ -7,5 +7,6 @@ import (
 
 func main() {
 	conf.Init()
+	conf.LoadRuleMap()
 	controller.StartService(controller.Init())
 }

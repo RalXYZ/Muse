@@ -12,43 +12,58 @@ The table below shows the current status of the features:
 
 All of these features will be implemented.  
 
-# Overview  
-| Bot API Wrapper | Configuration Manager |
-| :-----: | :-------------------: |
-| [telegram-bot-api v5](https://github.com/go-telegram-bot-api/telegram-bot-api/tree/bot-api-5.0) | [viper](https://github.com/spf13/viper) |
+## Overview  
+| Bot API Wrapper | Conf Manager | Log Manager |
+| :-----: | :-------------------: | :--------: |
+| [telegram-bot-api v5](https://github.com/go-telegram-bot-api/telegram-bot-api/tree/bot-api-5.0) | [spf13/viper](https://github.com/spf13/viper) | [sirupsen/logrus](https://github.com/sirupsen/logrus)
 
-Imagine forwarding procedure as a *complete bipartite graph*. A complete bipartite graph `K_(3,5)` is shown below:  
-![The complete bipartite graph K_(3,5)](https://i.loli.net/2021/01/31/kAvLZMEIKSbNPXG.png)  
-The blue dots represent senders, while the red dots represent receivers. 
-In the graph shown above, if one sender sends a message, every receiver shall receive it. 
-In this project, the senders are always Telegram channels, and the receivers may vary: channels, groups, or maybe some users.  
+## Getting Started
+0. Apply for a Telegram Bot from BotFather.
+1. Download the source code files and compile it.   
+2. Create a config file under the same directory of the binary file, and set it correctly.  
+3. Run. Enjoy.  
 
-# Configuration
+## Configuration
 A configuration file named `conf.yaml` needs to be placed under the same directory of the binary file.  
-The configuration file needs to be in `YAML` format. 
-Here is an example: 
+The configuration file needs to be in `YAML` format.
+Here is an example:
 
 ```yaml
 bot:
   token: TokenStingOfYourBot  # you need to get this from @BotFather
   debug: false                # decide whether the program is in debug mode
-forward:                      # the ID and channel-username you want to forward from/to
-  src: [-1004998307033, 5821739913]        # senders
-  dest: [-1001699850137, -10052614894123]  # receivers
-  # these configurations are also legal:
-  # src: -1001699850137
-  # dest: 5821739913
-  # or
-  # src: [5821739913]
-  # dest: [-1001699850137]
+rule:                  # the ID and channel-username you want to forward from/to
+  -1004998307033:      # sender
+    - -1001699850137   # receiver
+    - -10052614894123  # receiver
+  5821739913:          # sender
+    - -1001699850137   # receiver
 ```
 
-In this project, the sender must be channels. 
-If you put the `ID` of a user or a group into the `src` field, the program will ignore it.  
-If you only need to forward from/to one source, you don't even need a YAML array.  
+The senders are always Telegram channels, and the receivers may vary:
+channels, groups, or maybe some users.  
+If you set sender as a user, or a group, then the program will simply ignore it.  
 
-# Getting Started
-0. Apply for a Telegram Bot from BotFather.
-1. Download the source code files and compile it.   
-2. Create a config file under the same directory of the binary file, and configure it correctly.  
-3. Run. Enjoy.  
+### Understanding the "rule" field in configuration file
+
+The following `YAML` piece:  
+
+```yaml
+rule:
+  1:
+    - 2
+    - 3
+  2:
+    - 3
+  3: 
+    - 1
+    - 4
+  5:
+    - 6
+  7:
+    - 6
+```
+
+Means the following forward relation:  
+
+![Explain relation using a graph](https://i.loli.net/2021/02/11/t7hUjJcfBAYKeQi.png)
