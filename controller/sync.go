@@ -10,16 +10,6 @@ type message struct {
 	tgbotapi.Message
 }
 
-func (m *message) needsFwd() bool {
-	for _, v := range conf.ForwardSrc.IdArray {
-		v := v
-		if v == m.Chat.ID {
-			return true
-		}
-	}
-	return false
-}
-
 func (m *message) syncFwd() {
 	for _, v := range conf.ForwardDest.IdArray {
 		go func(chatID int64) {

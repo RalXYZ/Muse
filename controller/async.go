@@ -25,7 +25,13 @@ func (m *message) asyncFwd() {
 			msg := tgbotapi.NewMediaGroup(chatID, media)
 			_, err := bot.Send(msg)
 			if err != nil {
-				logrus.Error(err)
+				logrus.Warn(media)
+				logrus.Info("The warning mentioned above may caused by go-telegram-bot-api, which is outdated")
+				/*
+				maybe go-telegram-bot-api is to be blame
+				for some cases that go into this branch.
+				Because go-telegram-bot-api is outdated.
+				 */
 			}
 		}(v)
 	}

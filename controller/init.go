@@ -24,24 +24,3 @@ func Init() (config tgbotapi.UpdateConfig) {
 
 	return
 }
-
-func StartService(config tgbotapi.UpdateConfig) {
-	updates := bot.GetUpdatesChan(config)
-
-	for update := range updates {
-		if update.ChannelPost == nil {
-			continue
-		}
-
-		srcMsg := message{Message: *update.ChannelPost}
-		if !srcMsg.needsFwd() {
-			continue
-		}
-
-		if srcMsg.MediaGroupID == "" {
-			srcMsg.syncFwd()
-		} else {
-			go srcMsg.asyncFwd()
-		}
-	}
-}
