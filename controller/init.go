@@ -34,14 +34,14 @@ func StartService(config tgbotapi.UpdateConfig) {
 		}
 
 		srcMsg := message{Message: *update.ChannelPost}
-
 		if !srcMsg.needsFwd() {
 			continue
 		}
 
 		if srcMsg.MediaGroupID == "" {
 			srcMsg.syncFwd()
+		} else {
+			go srcMsg.asyncFwd()
 		}
-		// TODO: else, asyncFwd()
 	}
 }

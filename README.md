@@ -6,7 +6,7 @@ The table below shows the current status of the features:
 
 | Feature | Text | Photo / Video | Audio | File | Media Group
 | :-----: | :---: | :---: | :---: | :---: | :---: |
-| Forward | ✔ | ✔ | ✔ | ✔ | ❌ |
+| Forward | ✔ | ✔ | ✔ | ✔ | ✔ |
 | Reply   | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Edit    | ❌ | ❌ | - | - | ❌ |
 

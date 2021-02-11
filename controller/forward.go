@@ -22,7 +22,6 @@ func (m *message) needsFwd() bool {
 
 func (m *message) syncFwd() {
 	for _, v := range conf.ForwardDest.IdArray {
-		v := v
 		go func(chatID int64) {
 			msg := m.createSyncMsg(chatID)
 			_, err := bot.Send(msg)
